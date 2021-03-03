@@ -21,14 +21,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeUnmount, onMounted, ref } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+} from '@nuxtjs/composition-api'
+import { notification } from 'ant-design-vue'
 import { Channel } from 'pusher-js'
 import pusher from '~/services/pusher'
 import api from '~/services/api'
 import PechiRequest from '~/type/PechiRequest'
 
 export default defineComponent({
-  setup(_props, context) {
+  setup() {
     const userName = ref('名無し')
     const channelRef = ref(null as Channel | null)
     const performSubmit = async () => {
@@ -38,7 +44,7 @@ export default defineComponent({
     onMounted(() => {
       const channel = pusher.subscribe('susupechi')
       channel.bind('pechi', function ({ caller }: PechiRequest) {
-        context.root.$notification.open({
+        notification.open({
           message: 'ﾍﾟﾁﾍﾟﾁ',
           description: `${caller}さんがスス子をﾍﾟﾁﾍﾟﾁしました`,
         })
