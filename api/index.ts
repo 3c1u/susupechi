@@ -1,5 +1,6 @@
 import express from 'express'
 import pusher from './pusher'
+import { emitPechi } from './emit'
 import PechiResponse from '~/type/PechiResponse'
 import PechiRequest from '~/type/PechiRequest'
 
@@ -17,6 +18,7 @@ app.post('/pechi', (req, res) => {
   pusher.trigger('susupechi', 'pechi', {
     caller,
   })
+  emitPechi(caller)
 
   res.statusCode = 200
   res.send(

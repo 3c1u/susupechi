@@ -4,7 +4,6 @@
       <a-space align="center" direction="vertical">
         <h1>Susuko Pechi-pechi</h1>
         <p>Susuko wo pechi-pechi shiyou!</p>
-        <p>{{ cluster }}</p>
         <a-space>
           <a-input
             ref="userNameInput"
