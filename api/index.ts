@@ -1,14 +1,23 @@
 import express from 'express'
+import pusher from './pusher'
 import PechiResponse from '~/type/PechiResponse'
+import PechiRequest from '~/type/PechiRequest'
 
-const app = express().use((_req, res, next) => {
-  res.header('Cache-Control', 'no-cache, no-store, must-revalidate')
-  res.header('Pragma', 'no-cache')
-  res.header('Expires', '0')
-  next()
-})
+const app = express()
+  .use((_req, res, next) => {
+    res.header('Cache-Control', 'no-cache, no-store, must-revalidate')
+    res.header('Pragma', 'no-cache')
+    res.header('Expires', '0')
+    next()
+  })
+  .use(express.json())
 
-app.get('/pechi', (_req, res) => {
+app.post('/pechi', (req, res) => {
+  const { caller } = req.body as PechiRequest
+  pusher.trigger('susupechi', 'pechi', {
+    caller,
+  })
+
   res.statusCode = 200
   res.send(
     JSON.stringify({

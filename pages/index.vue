@@ -1,32 +1,56 @@
 <template>
   <div class="index__main-content">
     <form class="index__form" @submit.prevent="performSubmit">
-      <Space align="center" direction="vertical">
+      <a-space align="center" direction="vertical">
         <h1>Susuko Pechi-pechi</h1>
         <p>Susuko wo pechi-pechi shiyou!</p>
-        <Button type="primary" html-type="submit">ﾍﾟﾁﾍﾟﾁ</Button>
-      </Space>
+        <p>{{ cluster }}</p>
+        <a-space>
+          <a-input
+            ref="userNameInput"
+            v-model="userName"
+            placeholder="Your name"
+          >
+            <a-icon slot="prefix" type="user" />
+          </a-input>
+          <a-button type="primary" html-type="submit">ﾍﾟﾁﾍﾟﾁ</a-button>
+        </a-space>
+      </a-space>
     </form>
   </div>
 </template>
 
 <script lang="ts">
-import { Space, Button } from 'ant-design-vue'
-import { defineComponent } from '@nuxtjs/composition-api'
+import { defineComponent, onBeforeUnmount, onMounted, ref } from '@nuxtjs/composition-api'
+import { Channel } from 'pusher-js'
+import pusher from '~/services/pusher'
 import api from '~/services/api'
+import PechiRequest from '~/type/PechiRequest'
 
 export default defineComponent({
-  components: {
-    Space,
-    Button,
-  },
-  setup(_props, _context) {
+  setup(_props, context) {
+    const userName = ref('名無し')
+    const channelRef = ref(null as Channel | null)
     const performSubmit = async () => {
-      const res = await api.getPechi()
-      alert(res.pechi)
+      await api.postPechi({ caller: userName.value })
     }
 
-    return { performSubmit }
+    onMounted(() => {
+      const channel = pusher.subscribe('susupechi')
+      channel.bind('pechi', function ({ caller }: PechiRequest) {
+        context.root.$notification.open({
+          message: 'ﾍﾟﾁﾍﾟﾁ',
+          description: `${caller}さんがスス子をﾍﾟﾁﾍﾟﾁしました`,
+        })
+      })
+      channelRef.value = channel
+    })
+
+    onBeforeUnmount(() => {
+      channelRef.value?.unbind_all()
+    })
+
+    return { performSubmit, userName }
   },
 })
 </script>

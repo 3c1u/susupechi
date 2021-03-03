@@ -1,5 +1,5 @@
-import getPechi from './getPechi'
+import postPechi from './postPechi'
 
 export default {
-  getPechi,
+  postPechi,
 }
