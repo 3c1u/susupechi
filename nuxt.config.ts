@@ -1,5 +1,7 @@
 import { defineNuxtConfig } from '@nuxtjs/composition-api'
 
+const isDevelopment = process.env.NODE_ENV === 'development'
+
 export default defineNuxtConfig({
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -23,7 +25,7 @@ export default defineNuxtConfig({
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
-    '@nuxtjs/dotenv',
+    ...(isDevelopment ? ['@nuxtjs/dotenv'] : []),
     // https://go.nuxtjs.dev/typescript
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/stylelint
