@@ -1,7 +1,5 @@
 import { defineNuxtConfig } from '@nuxtjs/composition-api'
 
-const isDevelopment = process.env.NODE_ENV === 'development'
-
 export default defineNuxtConfig({
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -16,6 +14,13 @@ export default defineNuxtConfig({
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: ['ant-design-vue/dist/antd.css'],
+
+  env: {
+    PUSHER_APP_ID: process.env.PUSHER_APP_ID || '',
+    PUSHER_KEY: process.env.PUSHER_KEY || '',
+    PUSHER_CLUSTER: process.env.PUSHER_CLUSTER || '',
+    PUSHER_BEAMS_INSTANCE_ID: process.env.PUSHER_BEAMS_INSTANCE_ID || '',
+  },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: ['@/plugins/antd-ui', { src: '~/plugins/beams.ts', ssr: false }],
